@@ -130,7 +130,7 @@ if __name__ == '__main__':
     
     cum_regret_histories = np.array(cum_regret_histories)
     
-#     # non parallerized version
+#     # non parallelized version
 #     for itr in np.linspace(1, Maxitr, Maxitr):
 #         itr = int(itr)
 #         cum_regret_history = simulate_instance(ClusterFirstRecommendNext, statparams, algoparams, int(itr), index)
@@ -138,7 +138,7 @@ if __name__ == '__main__':
 #         emp_avg_regret = ((itr - 1)*emp_avg_regret + 1*cum_regret_histories[itr-1]) / (itr)
 #         cum_regret_histories[int(itr-1)] = cum_regret_history
         
-    # pararellized version
+    # parallelized version
     for itr in np.linspace(1, Maxitr, Maxitr):
         itr = int(itr)
         emp_avg_regret = ((itr - 1)*emp_avg_regret + 1*cum_regret_histories[itr-1]) / (itr)

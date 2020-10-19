@@ -123,7 +123,7 @@ if __name__ == '__main__':
     
     start = time.time()
     
-    # pararellized version
+    # parallelized version
     p = Pool(processes=NUM_PROCESSES)
     itrs = [[ClusterFirstRecommendNext, statparams, algoparams, int(itr), index] for itr in np.linspace(1, Maxitr, Maxitr)]
     cum_regret_histories = p.map(wrapper, itrs)
@@ -135,7 +135,7 @@ if __name__ == '__main__':
     
     cum_regret_histories = np.array(cum_regret_histories)
     
-#     # non parallerized version
+#     # non parallelized version
 #     for itr in np.linspace(1, Maxitr, Maxitr):
 #         itr = int(itr)
 #         cum_regret_history = simulate_instance(ClusterFirstRecommendNext, statparams, algoparams, int(itr), index)
