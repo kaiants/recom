@@ -231,7 +231,6 @@ class ClusterFirstRecommendNext():
         self.u_current = 0
         self.LARGE_CONST = 30
         
-        # for debug
         self.cnt_suboptimal_items = 0
         self.cnt_num_tests = 0
         
@@ -309,7 +308,6 @@ class ClusterFirstRecommendNext():
             print('self.cnt_num_tests', end="")
             print(self.cnt_num_tests)
         
-        #assert self.Xi_current[self.item_selected, self.u_current] == 0
         
         # record previously used item
         self.item_prev = self.item_selected
@@ -361,7 +359,6 @@ class ClusterFirstRecommendNext():
             print('random sampling')
             
             # do not update the counter
-            #self.item_cnt[self.item_selected] = self.item_cnt[self.item_selected] + 1
             
             # indicate not to record the reward
             self.reward_rec_flag = 0
@@ -405,8 +402,7 @@ class ClusterFirstRecommendNext():
             average_cluster_tmp[m] = averages[m]
         average_cluster_tmp = np.array(average_cluster_tmp)
         
-#         # averaging also over Q
-#         for m in M: 
+
         
         # reorder the cluster_average (in a discreasing order in k)
         for k in range(self.K):
@@ -463,17 +459,12 @@ class ClusterFirstRecommendNext():
             if self.Xi_current[self.item_selected, self.u_current] == 1:
                 from IPython.core.debugger import Pdb; Pdb().set_trace()
                 
-            
-            #assert self.Xi_current[self.item_selected, self.u_current] == 0
+
             
         # update the counter
         self.item_cnt[self.item_selected] = self.item_cnt[self.item_selected] + 1
         
         
-        #if self.Xi_current[self.item_selected, self.u_current] ==1:
-                   
-
-        #assert self.Xi_current[self.item_selected, self.u_current] == 0
         
     
     def initialize_V(self):

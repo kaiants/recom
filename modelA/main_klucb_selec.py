@@ -130,13 +130,6 @@ if __name__ == '__main__':
     
     cum_regret_histories = np.array(cum_regret_histories)
     
-#     # non parallelized version
-#     for itr in np.linspace(1, Maxitr, Maxitr):
-#         itr = int(itr)
-#         cum_regret_history = simulate_instance(ClusterFirstRecommendNext, statparams, algoparams, int(itr), index)
-#         cum_regret_history = np.array(cum_regret_history)
-#         emp_avg_regret = ((itr - 1)*emp_avg_regret + 1*cum_regret_histories[itr-1]) / (itr)
-#         cum_regret_histories[int(itr-1)] = cum_regret_history
         
     # parallelized version
     for itr in np.linspace(1, Maxitr, Maxitr):
@@ -170,15 +163,13 @@ if __name__ == '__main__':
     #plot save
     pdf = PdfPages('cumlative_regret.pdf')
     plt.figure()
-    #plt.plot(times, cum_regret_history, label='algorithm regret (one instance)', )
     
     plt.plot(times, emp_avg_regret, label='algorithm regret (instances average)', color='navy')
     plt.fill_between(times, emp_avg_regret_plus_err, emp_avg_regret_minus_err, alpha=0.3, color='navy')
-    #plt.plot(times, cum_regret_avg , label='T/m', color = 'firebrick')
+
     plt.legend()
     plt.xlabel('t')
     plt.ylabel('Regret')
-    #plt.show()
     pdf.savefig()
     pdf.close()
     
