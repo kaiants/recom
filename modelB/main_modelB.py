@@ -71,8 +71,7 @@ if __name__ == '__main__':
     
     
     T_0 = int(2* 0.001 * np.floor(32**2 / epsilon_satis_regret**2 * (np.log(horizon))**2) )#  exploration durations
-#     s  = int( * np.log(horizon)**2)
-#     T_0 = int(1 * np.log(horizon)**3)
+
     
     print('s=', end="")
     print(s)
@@ -134,15 +133,12 @@ if __name__ == '__main__':
     #plot save
     pdf = PdfPages('cumlative_regret.pdf')
     plt.figure()
-    #plt.plot(times, cum_regret_history, label='algorithm regret (one instance)', )
     
     plt.plot(times, emp_avg_regret, label='algorithm regret (instances average)', color='navy')
     plt.fill_between(times, emp_avg_regret_plus_err, emp_avg_regret_minus_err, alpha=0.3, color='navy')
-    #plt.plot(times, cum_regret_avg , label='T/m', color = 'firebrick')
     plt.legend()
     plt.xlabel('t')
     plt.ylabel('Regret')
-    #plt.show()
     pdf.savefig()
     pdf.close()
     

@@ -66,9 +66,6 @@ if __name__ == '__main__':
     '''
     Algorithm's input paramters
     '''
-#     s = int(np.floor( (8**2 / epsilon_satis_regret**2 * np.log(horizon)))) # initial item selection numbers
-    
-#     T_0 = 0.01 *np.floor(32**2 / epsilon_satis_regret**2 * (np.log(horizon))**2) #  exploration durations
     
     s =  min(int(horizon / M * np.log(horizon)), N)
     T_0 = int(np.log(horizon)**3)
@@ -106,13 +103,6 @@ if __name__ == '__main__':
     
     cum_regret_histories = np.array(cum_regret_histories)
     
-#     # non parallelized version
-#     for itr in np.linspace(1, Maxitr, Maxitr):
-#         itr = int(itr)
-#         cum_regret_history = simulate_instance(ClusterFirstRecommendNext, statparams, algoparams, int(itr), index)
-#         cum_regret_history = np.array(cum_regret_history)
-#         emp_avg_regret = ((itr - 1)*emp_avg_regret + 1*cum_regret_histories[itr-1]) / (itr)
-#         cum_regret_histories[int(itr-1)] = cum_regret_history
         
     # parallelized version
     for itr in np.linspace(1, Maxitr, Maxitr):
@@ -146,7 +136,6 @@ if __name__ == '__main__':
     plt.legend()
     plt.xlabel('t')
     plt.ylabel('Regret')
-    #plt.show()
     pdf.savefig()
     pdf.close()
     

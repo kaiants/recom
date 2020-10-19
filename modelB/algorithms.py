@@ -68,8 +68,6 @@ class KLStopping():
 
         # increment time
         self.t = self.t + 1
-                
-        #assert self.Xi_current[self.item_selected, self.u_current] == 0
         
         # record previously selected item
         self.item_prev = self.item_selected
