@@ -96,7 +96,7 @@ if __name__ == '__main__':
     start = time.time()
 
     if PARALLELIZE_ON:
-        # pararellized version    
+        # parallelized version    
         p = Pool(processes=NUM_PROCESSES)
         itrs = [[KLStopping, statparams, algoparams, int(itr), index] for itr in np.linspace(1, Maxitr, Maxitr)]
         cum_regret_histories = p.map(wrapper, itrs)
@@ -106,7 +106,7 @@ if __name__ == '__main__':
             emp_avg_regret = ((itr - 1)*emp_avg_regret + 1*cum_regret_histories[itr-1]) / (itr)
         cum_regret_histories = np.array(cum_regret_histories)
     else:
-        #non pararellized
+        #non parallelized
         for itr in np.linspace(1, Maxitr, Maxitr):
             cum_regret_history = simulate_instance(KLStopping, statparams, algoparams, int(itr), index)
             cum_regret_history = np.array(cum_regret_history)
