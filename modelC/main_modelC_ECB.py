@@ -1,3 +1,4 @@
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
@@ -11,7 +12,7 @@ import datetime
 NUM_PROCESSES = 10
 
 from problems import RecommendationsSynthetic
-from algorithms import BiClusterRecommend
+from algorithms import ClusterUCB1
 
 
 def wrapper(args):
@@ -36,13 +37,14 @@ def simulate_instance(algorithm, statparams, algoparams, seed, index):
 
 if __name__ == '__main__':
     
-    Maxitr = 10 #iteration number 
+    horizon = int(sys.argv[1])
+    Maxitr = 10#iteration number 
    
     '''
     Statistical parameters
     '''
     
-    horizon = 800000 # time horizon
+    #     horizon = 800000 # time horizon
     N = 2000 # number of items
     M = 5000 # number of users
     # alpha before the normalization sum alpha_k = N
@@ -104,21 +106,17 @@ if __name__ == '__main__':
     print(s)
     s_user = int(M / np.log(horizon))
     print('s_user=',end="")
-    print(s_user)
-    s_u_star = int(np.log(horizon)**2)
-    print('s_u_star=', end="")
-    print(s_u_star)
+    print(s_user) 
     
+    
+    
+    print('T/m=', end="")
+    print(horizon/M)
     
     # duration of exploration phase
-    T_0 = 0 #10 * M
+    T_0 = 0 #T_0 = 10 * M
     print('T_0=',end="")
     print(T_0)
-    
-    # correspoinding to (10 + log T) m
-    T_1 = int(np.floor( (10 + np.log(horizon)) * M ))
-    print('T_1=',end="")
-    print(T_1)
     
     
     epsilon_alg = 1/100
@@ -130,7 +128,7 @@ if __name__ == '__main__':
     assert 0 < epsilon_alg and epsilon_alg < 1
     
     index = 1
-    algoparams = (horizon, s, s_user, s_u_star, T_0, T_1, epsilon_alg, M, N, K, L, coef_of_hyothesis_testing)
+    algoparams = (horizon, s, s_user, T_0, epsilon_alg, M, N, K, L, coef_of_hyothesis_testing)
     
     '''
     simulation
@@ -143,11 +141,12 @@ if __name__ == '__main__':
     
     start = time.time()
     
-    #     # parallelized version
+        # parallelized version
     pools = Pool(processes=NUM_PROCESSES)
-    itrs = [[BiClusterRecommend, statparams, algoparams, int(itr), index] for itr in np.linspace(1, Maxitr, Maxitr)]
+    itrs = [[ClusterUCB1, statparams, algoparams, int(itr), index] for itr in np.linspace(1, Maxitr, Maxitr)]
     cum_regret_histories = pools.map(wrapper, itrs)
     pools.close()
+    
     cum_regret_histories = np.array(cum_regret_histories)
     for itr in np.linspace(1, Maxitr, Maxitr):
         itr = int(itr)
@@ -156,7 +155,7 @@ if __name__ == '__main__':
 #     # non parallelized version
 #     for itr in np.linspace(1, Maxitr, Maxitr):
 #         itr = int(itr)
-#         cum_regret_history = simulate_instance(BiClusterRecommend, statparams, algoparams, 1, index)
+#         cum_regret_history = simulate_instance(ClusterUCB1, statparams, algoparams, 1, index)
 #         cum_regret_history = np.array(cum_regret_history)
 #         emp_avg_regret = ((itr - 1)*emp_avg_regret + 1*cum_regret_histories[itr-1]) / (itr)
 #         cum_regret_histories[int(itr-1)] = cum_regret_history
@@ -189,6 +188,9 @@ if __name__ == '__main__':
     emp_avg_regret_plus_err = emp_avg_regret + stds
     emp_avg_regret_minus_err = emp_avg_regret - stds
     
+    np.savetxt("emp_avg_regret_UCB_with_T_"+str(horizon)+".csv", emp_avg_regret, delimiter=",")
+    np.savetxt("stds_T_"+str(horizon)+".csv", stds, delimiter=",")
+    
 #     #plot save
 #     pdf = PdfPages('cumlative_regret'+ dt.strftime("%m_%d_%H_%M")+'.pdf')
 #     plt.figure()
@@ -201,8 +203,8 @@ if __name__ == '__main__':
     plt.xlabel('t')
     plt.ylabel('Regret')
     #plt.show()
-#     pdf.savefig()
-#     pdf.close()
+    pdf.savefig()
+    pdf.close()
     
     
     
