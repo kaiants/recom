@@ -1,6 +1,5 @@
 import numpy as np
 import random
-# import optspace
 from functions import rand_argmin, rand_argmax, lowrank_approx, compute_second_eigenvector
 from kullback_leibler import klucbBern
 import copy
@@ -153,7 +152,6 @@ class BiClusterRecommend():
         indices = random.sample(range(self.M), self.s_user)
         for index in indices:
             self.U_0[index] = 1
-        #from IPython.core.debugger import Pdb; Pdb().set_trace()
         
         
         
@@ -316,11 +314,6 @@ class BiClusterRecommend():
         print('err_rate after SC=', end="")
         print(err_rate)
 
-            
-        #         print('self.A_obs_cnt = ', end="")
-        #         print(self.A_obs_cnt)
-        #         print('ratio self.A_obs_cnt/self.s**2 = ', end="")
-        #         print(self.A_obs_cnt/self.s**2)
 
         #estimation of \hat{p}(i, j)
         for i in range(self.K):
@@ -332,9 +325,7 @@ class BiClusterRecommend():
                 denominator = len(T[i]) * self.s
                 self.P_kl[i, j]  = numerator/denominator
                 
-        
 
-        
         
         # local improvement        
         S = [0 for i in range(self.K)]
@@ -386,7 +377,6 @@ class BiClusterRecommend():
             if self.S[i] == 1:
                 self.I[i] = self.I_S[self.N_to_S[i]]
                 
-        # for the debug (compuation of err rate)
         err_num = 0
         for i in range(self.N):
             if i <= int(self.N/2 - 1):
@@ -461,7 +451,7 @@ class BiClusterRecommend():
                     self.item_selected = rand_argmax(recommendable_from_I_k)
                 else:
                     self.item_selected = rand_argmin(self.Xi_u)
-                    #print('random sampling (exploi)')
+
         #end round robbin
         else: # exploitation using L
             x_kl  = np.zeros((self.K, 2))
@@ -482,13 +472,12 @@ class BiClusterRecommend():
             
             
             recom_k = 0
-            #print('len(L_ind) = ', end="")
-            #print(len(L_ind))
+
             if len(L_ind) != 0:
                 setbestk = set()
                 for l in L_ind:
                     setbestk.add(self.argmax_k[l])
-                #random.sample(L_ind,1)
+
 
                 recom_k = random.sample(setbestk, 1)
             else:
@@ -517,7 +506,7 @@ class BiClusterRecommend():
                         self.item_selected = rand_argmax(recommendable_from_I_k)
                     else:
                         self.item_selected = rand_argmin(self.Xi_u)
-                        #print('random sampling (exploi)')
+
                 else:
                     # recom from 1
                     recom_k = 1
@@ -527,10 +516,8 @@ class BiClusterRecommend():
                         self.item_selected = rand_argmax(recommendable_from_I_k)
                     else:
                         self.item_selected = rand_argmin(self.Xi_u)
-                        #print('random sampling (exploi)')
-                
-            #if self.ind_user_clust > 2:
-            #   from IPython.core.debugger import Pdb; Pdb().set_trace()
+
+
         #update the counter
         self.item_cnt[self.item_selected] = self.item_cnt[self.item_selected] + 1
         
@@ -651,7 +638,7 @@ class BiClusterRecommend():
         U_0_tmp = self.U_0.copy()
         for ind in range(self.s_u_star):
             cnt_users_star = np.zeros(self.M)
-            #cnt_users_star = np.sum(np.multiply(np.array(self.Xi_current[:, u]), np.array(U_0_tmp) == 1))
+
             for u in range(self.M):
                 cnt_users_star[u] =  np.sum(np.array(self.Xi_current[:, u])) *  U_0_tmp[u] - 1 * np.array(U_0_tmp[u]==0)
             
@@ -947,11 +934,6 @@ class ClusterUCB1():
         print(err_rate)
 
             
-        #         print('self.A_obs_cnt = ', end="")
-        #         print(self.A_obs_cnt)
-        #         print('ratio self.A_obs_cnt/self.s**2 = ', end="")
-        #         print(self.A_obs_cnt/self.s**2)
-
         #estimation of \hat{p}(i, j)
         for i in range(self.K):
             for j in range(self.K):

@@ -152,13 +152,6 @@ if __name__ == '__main__':
         itr = int(itr)
         emp_avg_regret = ((itr - 1)*emp_avg_regret + 1*cum_regret_histories[itr-1]) / (itr)
     
-#     # non parallelized version
-#     for itr in np.linspace(1, Maxitr, Maxitr):
-#         itr = int(itr)
-#         cum_regret_history = simulate_instance(ClusterUCB1, statparams, algoparams, 1, index)
-#         cum_regret_history = np.array(cum_regret_history)
-#         emp_avg_regret = ((itr - 1)*emp_avg_regret + 1*cum_regret_histories[itr-1]) / (itr)
-#         cum_regret_histories[int(itr-1)] = cum_regret_history
         
 
     process_time = time.time() - start
@@ -181,10 +174,7 @@ if __name__ == '__main__':
     for t in range(horizon):
         stds[t] = np.std(cum_regret_histories[:, t], ddof=1)
         
-#     dt = datetime.datetime.now()
-#     np.savetxt("emp_avg_regret_with"+ dt.strftime("%m_%d_%H_%M")+".csv", emp_avg_regret, delimiter=",")
-#     np.savetxt("stds"+ dt.strftime("%m_%d_%H_%M")+".csv", stds, delimiter=",")
-    #compute average regret history +- err
+
     emp_avg_regret_plus_err = emp_avg_regret + stds
     emp_avg_regret_minus_err = emp_avg_regret - stds
     
@@ -192,17 +182,15 @@ if __name__ == '__main__':
     np.savetxt("stds_T_"+str(horizon)+".csv", stds, delimiter=",")
     
 #     #plot save
-#     pdf = PdfPages('cumlative_regret'+ dt.strftime("%m_%d_%H_%M")+'.pdf')
-#     plt.figure()
-    #plt.plot(times, cum_regret_history, label='algorithm regret (one instance)', )
+
     
     plt.plot(times, emp_avg_regret, label='algorithm regret (instances average)', color='navy')
     plt.fill_between(times, emp_avg_regret_plus_err, emp_avg_regret_minus_err, alpha=0.3, color='navy')
-    #plt.plot(times, cum_regret_avg , label='T/m', color = 'firebrick')
+
     plt.legend()
     plt.xlabel('t')
     plt.ylabel('Regret')
-    #plt.show()
+
     pdf.savefig()
     pdf.close()
     
